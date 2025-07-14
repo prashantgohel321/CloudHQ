@@ -1,0 +1,906 @@
+/* CSS Variables for consistent theming */
+:root {
+    --bg-color: #1a1e28; /* Dark background */
+    --sidebar-bg: #1e242f; /* Slightly darker sidebar */
+    --card-bg-light: rgba(255, 255, 255, 0.08); /* Light glassmorphism background */
+    --card-bg-dark: rgba(0, 0, 0, 0.15); /* Darker glassmorphism background */
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-color: #e0e0e0; /* Light text for dark background */
+    --primary-blue: #007bff; /* Azure Blue for highlights */
+    --primary-blue-light: #66b3ff; /* Lighter blue for accents */
+    --secondary-gray: #4a5568; /* For muted text/borders */
+    --green-status: #28a745; /* Forest Green for compliance/good */
+    --yellow-warning: #ffc107; /* Yellow for warnings */
+    --red-critical: #dc3545; /* Red for critical alerts */
+    --neumorphic-light: #303746; /* Lighter neumorphic shade */
+    --neumorphic-dark: #12151e; /* Darker neumorphic shade */
+    --neumorphic-shadow-light: rgba(255, 255, 255, 0.05);
+    --neumorphic-shadow-dark: rgba(0, 0, 0, 0.4);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Dashboard Container Layout (Flexbox) */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row; /* Default for desktop */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    padding: 2rem 1rem;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    position: sticky; /* Sticky sidebar for long content */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto; /* Enable scrolling for long sidebars */
+    z-index: 1000;
+    transition: width 0.3s ease; /* Smooth collapse/expand */
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-item:hover {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: var(--primary-blue-light);
+}
+
+.nav-item.active {
+    background-color: var(--primary-blue);
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.nav-item .material-icons {
+    margin-right: 0.8rem;
+    font-size: 1.4rem;
+}
+
+.quick-actions {
+    margin-top: auto; /* Pushes quick actions to the bottom */
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.quick-actions h3 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+/* Neumorphic Button Style */
+.neumorphic-btn {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.8rem;
+    background-color: var(--neumorphic-light);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 5px 5px 10px var(--neumorphic-shadow-dark),
+                -5px -5px 10px var(--neumorphic-shadow-light);
+    transition: all 0.2s ease;
+}
+
+.neumorphic-btn:hover {
+    background-color: var(--primary-blue);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.neumorphic-btn:active {
+    box-shadow: inset 2px 2px 5px var(--neumorphic-shadow-dark),
+                inset -2px -2px 5px var(--neumorphic-shadow-light);
+    transform: translateY(1px);
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto; /* Enable scrolling for main content */
+}
+
+/* Dashboard Section Transitions */
+.dashboard-section {
+    display: none; /* Hidden by default, shown by JS */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.dashboard-section.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 1rem; /* Space for filters on wrap */
+}
+
+/* Filter Dropdowns */
+.filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filters select,
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    appearance: none; /* Remove default dropdown arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23e0e0e0%22%20d%3D%22M287%2C197.3L159.2%2C69.5c-4.7-4.7-12.3-4.7-17%2C0L5.4%2C197.3c-4.7%2C4.7-4.7%2C12.3%2C0%2C17l8.5%2C8.5c4.7%2C4.7%2C12.3%2C4.7%2C17%2C0l118.8-118.8l118.8%2C118.8c4.7%2C4.7%2C12.3%2C4.7%2C17%2C0l8.5-8.5C291.7%2C209.6%2C291.7%2C202%2C287%2C197.3z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+    cursor: pointer;
+    outline: none; /* Remove outline on focus */
+}
+
+.filters select:focus,
+.form-group input[type="text"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary-blue-light);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+}
+
+/* Card Grid Layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+}
+
+/* Glassmorphism Card Style */
+.card {
+    background-color: var(--card-bg-light);
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* For audit logs and tables */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.45);
+}
+
+.card h3 {
+    font-size: 1.3rem;
+    color: var(--primary-blue-light);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Table Styling (IAM Role Overview) */
+.table-container {
+    overflow-x: auto; /* Enable horizontal scroll for tables on small screens */
+    max-height: 400px; /* Limit height for scrollable tables */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 600px; /* Ensure table doesn't get too narrow */
+}
+
+th, td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+    background-color: rgba(0, 123, 255, 0.15);
+    font-weight: 500;
+    color: var(--primary-blue-light);
+    position: sticky;
+    top: 0;
+    z-index: 1; /* Keep header visible on scroll */
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Badges for IAM Roles */
+.badge {
+    display: inline-block;
+    padding: 0.3em 0.7em;
+    border-radius: 5px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    margin-bottom: 0.3rem;
+    white-space: nowrap; /* Prevent badge text from wrapping */
+}
+
+.badge.admin { background-color: var(--red-critical); }
+.badge.read { background-color: var(--green-status); }
+.badge.write { background-color: var(--yellow-warning); color: #333; }
+.badge.root { background-color: #8B0000; color: white; } /* Darker red for root */
+.badge.viewer { background-color: #4CAF50; } /* Another green shade */
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+/* Access Request Cards */
+.request-cards-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.request-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.request-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-blue-light);
+    font-size: 1.1rem;
+}
+
+.request-card p {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.request-card .status-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.3em 0.8em;
+    border-radius: 5px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-tag.pending { background-color: var(--yellow-warning); color: #333; }
+.status-tag.approved { background-color: var(--green-status); color: white; }
+.status-tag.denied { background-color: var(--red-critical); color: white; }
+.status-tag.expired { background-color: var(--secondary-gray); color: white; }
+
+.request-card .actions {
+    margin-top: 0.8rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.request-card .actions button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.request-card .actions .approve { background-color: var(--green-status); color: white; }
+.request-card .actions .deny { background-color: var(--red-critical); color: white; }
+.request-card .actions button:hover { opacity: 0.8; }
+
+/* Audit Log Terminal */
+.audit-log-card {
+    grid-column: 1 / -1; /* Make it span full width */
+}
+
+.audit-logs-terminal {
+    background-color: #0d1117; /* Dark terminal background */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    height: 400px;
+    overflow-y: auto; /* Scrollable */
+    font-family: 'Fira Code', 'Cascadia Code', monospace; /* Monospace font for logs */
+    font-size: 0.9rem;
+    color: #c9d1d9; /* Light gray text */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+.log-entry {
+    margin-bottom: 0.3rem;
+    opacity: 0; /* Hidden initially for fade-in */
+    animation: fadeIn 0.5s forwards;
+}
+
+.log-entry.info { color: #8bc34a; } /* Light green */
+.log-entry.alert { color: var(--red-critical); font-weight: 600; }
+.log-entry.warning { color: var(--yellow-warning); }
+.log-entry.debug { color: #9e9e9e; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Resource Provisioning */
+.provisioned-resource-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.provisioned-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.provisioned-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-blue-light);
+    font-size: 1.1rem;
+}
+
+.provisioned-card p {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.provisioned-card .status-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.3em 0.8em;
+    border-radius: 5px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.provisioned-card .status-tag.provisioning { background-color: var(--primary-blue); color: white; }
+.provisioned-card .status-tag.completed { background-color: var(--green-status); color: white; }
+.provisioned-card .status-tag.failed { background-color: var(--red-critical); color: white; }
+
+.provisioned-card .delete-btn {
+    background-color: var(--red-critical);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+    align-self: flex-end; /* Align to bottom right */
+    transition: opacity 0.2s ease;
+}
+
+.provisioned-card .delete-btn:hover {
+    opacity: 0.8;
+}
+
+/* Calendar Styling */
+.calendar-card {
+    grid-column: span 1; /* Default to one column */
+}
+
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#calendar-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+#calendar-header button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+}
+
+.calendar-grid span {
+    font-weight: 500;
+    color: var(--primary-blue-light);
+    padding: 0.5rem 0;
+}
+
+.calendar-day {
+    padding: 0.7rem;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px; /* Ensure consistent height */
+}
+
+.calendar-day:hover:not(.empty):not(.current-day) {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.calendar-day.empty {
+    background-color: transparent;
+    cursor: default;
+}
+
+.calendar-day.current-day {
+    background-color: var(--primary-blue);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+.calendar-day.has-event {
+    border: 2px solid var(--yellow-warning);
+}
+
+.calendar-day .event-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--yellow-warning);
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+.expiry-details-card {
+    grid-column: span 1;
+}
+
+#expiry-details-list p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.expiry-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--yellow-warning);
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+}
+.expiry-item.green { border-left-color: var(--green-status); }
+.expiry-item.red { border-left-color: var(--red-critical); }
+
+
+/* Cloud Hygiene Score */
+.score-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--primary-blue-light);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+.score-total {
+    font-size: 2rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.health-indicator {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.health-indicator.green { background-color: var(--green-status); color: white; }
+.health-indicator.yellow { background-color: var(--yellow-warning); color: #333; }
+.health-indicator.red { background-color: var(--red-critical); color: white; }
+
+.checklist-card ul {
+    list-style: none;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+}
+
+.checklist-item .material-icons {
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.checklist-item.compliant .material-icons { color: var(--green-status); }
+.checklist-item.warning .material-icons { color: var(--yellow-warning); }
+.checklist-item.critical .material-icons { color: var(--red-critical); }
+
+.action-hint {
+    font-size: 0.8em;
+    opacity: 0.7;
+    margin-left: 0.5rem;
+}
+
+/* Best Practices & Learning Hub Cards */
+.practice-card, .learning-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push link icon to bottom right */
+    position: relative;
+}
+
+.practice-card p, .learning-card p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    flex-grow: 1; /* Allow text to take space */
+}
+
+.external-link {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 1.2rem;
+    color: var(--primary-blue-light);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.practice-card:hover .external-link,
+.learning-card:hover .external-link {
+    opacity: 1;
+}
+
+/* Compliance Panel */
+.compliance-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.compliance-card .status-tag {
+    position: static; /* Override absolute positioning from request cards */
+    align-self: flex-start; /* Align to top left within card */
+    margin-bottom: 0.8rem;
+    font-size: 0.85em;
+}
+
+.compliance-card .audit-info {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: auto; /* Push to bottom */
+}
+
+.compliance-card.compliant { border-left: 5px solid var(--green-status); }
+.compliance-card.at-risk { border-left: 5px solid var(--yellow-warning); }
+.compliance-card.non-compliant { border-left: 5px solid var(--red-critical); }
+
+
+/* Quick Action Feedback Message */
+#action-feedback {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 2000;
+}
+
+#action-feedback.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        flex-direction: column; /* Stack sidebar on top for tablets */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static; /* No longer sticky */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        padding-bottom: 1rem;
+    }
+
+    .sidebar .logo {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar .main-nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .sidebar .nav-item {
+        flex-direction: column;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+        text-align: center;
+        margin-bottom: 0; /* Reset margin */
+    }
+
+    .sidebar .nav-item .material-icons {
+        margin-right: 0;
+        margin-bottom: 0.3rem;
+    }
+
+    .quick-actions {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .quick-actions h3 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .action-btn {
+        width: auto; /* Allow buttons to size content */
+        flex-grow: 1;
+        max-width: 48%; /* Two columns */
+        margin-bottom: 0;
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .filters {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+    }
+
+    .filters select {
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr; /* Single column for cards */
+    }
+
+    table {
+        min-width: 100%; /* Ensure table fits */
+    }
+
+    .calendar-card, .expiry-details-card {
+        grid-column: 1 / -1; /* Full width for calendar and details */
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .filters {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filters select {
+        width: 100%;
+    }
+
+    .action-btn {
+        max-width: 100%; /* Stack quick action buttons */
+    }
+
+    .score-display {
+        font-size: 3rem;
+    }
+    .score-total {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 1rem 0.5rem;
+    }
+    .logo h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .nav-item {
+        font-size: 0.75rem;
+        padding: 0.4rem;
+    }
+    .nav-item .material-icons {
+        font-size: 1.2rem;
+    }
+    .main-content {
+        padding: 0.8rem;
+    }
+    .section-header h2 {
+        font-size: 1.3rem;
+    }
+    .card {
+        padding: 1rem;
+    }
+    .card h3 {
+        font-size: 1.1rem;
+    }
+    table {
+        font-size: 0.8rem;
+    }
+    th, td {
+        padding: 0.6rem 0.8rem;
+    }
+    .badge {
+        font-size: 0.65em;
+        padding: 0.2em 0.5em;
+    }
+    .form-group label {
+        font-size: 0.85rem;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    .neumorphic-btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    .audit-logs-terminal {
+        height: 300px;
+        font-size: 0.8rem;
+    }
+    .calendar-day {
+        min-height: 50px;
+        font-size: 0.8rem;
+    }
+    .score-display {
+        font-size: 2.5rem;
+    }
+    .score-total {
+        font-size: 1.2rem;
+    }
+}

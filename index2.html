@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudHQ - CloudOps & Access Management</title>
+    <!-- Google Fonts: Poppins for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Material Icons for a wide range of icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>CloudHQ</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="nav-item active" data-section="iam-overview">
+                        <span class="material-icons">security</span> IAM Role Overview
+                    </li>
+                    <li class="nav-item" data-section="access-request">
+                        <span class="material-icons">how_to_reg</span> Access Request Manager
+                    </li>
+                    <li class="nav-item" data-section="audit-logs">
+                        <span class="material-icons">article</span> Cloud Audit Logs
+                    </li>
+                    <li class="nav-item" data-section="resource-provisioning">
+                        <span class="material-icons">cloud_upload</span> Resource Provisioning
+                    </li>
+                    <li class="nav-item" data-section="iam-calendar">
+                        <span class="material-icons">calendar_today</span> IAM Policy Expiry
+                    </li>
+                    <li class="nav-item" data-section="hygiene-score">
+                        <span class="material-icons">health_and_safety</span> Cloud Hygiene Score
+                    </li>
+                    <li class="nav-item" data-section="best-practices">
+                        <span class="material-icons">lightbulb</span> Security Best Practices
+                    </li>
+                    <li class="nav-item" data-section="compliance-panel">
+                        <span class="material-icons">verified_user</span> Compliance Panel
+                    </li>
+                    <li class="nav-item" data-section="learning-hub">
+                        <span class="material-icons">school</span> Cloud Learning Hub
+                    </li>
+                </ul>
+            </nav>
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <button class="neumorphic-btn action-btn" data-action="generate-credentials">Generate Temp Credentials</button>
+                <button class="neumorphic-btn action-btn" data-action="rotate-keys">Rotate All Keys</button>
+                <button class="neumorphic-btn action-btn" data-action="audit-unused">Audit Unused Resources</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- IAM Role Overview Section -->
+            <section id="iam-overview" class="dashboard-section active">
+                <div class="section-header">
+                    <h2>IAM Role Overview</h2>
+                    <div class="filters">
+                        <select id="provider-filter">
+                            <option value="">All Providers</option>
+                            <option value="AWS">AWS</option>
+                            <option value="Azure">Azure</option>
+                            <option value="GCP">GCP</option>
+                        </select>
+                        <select id="department-filter">
+                            <option value="">All Departments</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Finance">Finance</option>
+                            <option value="HR">HR</option>
+                        </select>
+                        <select id="access-filter">
+                            <option value="">All Access Levels</option>
+                            <option value="Read">Read</option>
+                            <option value="Write">Write</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Root">Root</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="card glassmorphism">
+                        <h3>Access Matrix</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Department</th>
+                                        <th>Provider</th>
+                                        <th>Roles</th>
+                                        <th>Access Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="iam-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Access Request Manager Section -->
+            <section id="access-request" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Access Request Manager</h2>
+                </div>
+                <div class="card-grid">
+                    <div class="card glassmorphism">
+                        <h3>New Access Request</h3>
+                        <form id="access-request-form">
+                            <div class="form-group">
+                                <label for="requester-name">Your Name:</label>
+                                <input type="text" id="requester-name" value="Jane Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="resource-name">Resource Name:</label>
+                                <input type="text" id="resource-name" value="prod-s3-bucket" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="access-level-request">Access Level:</label>
+                                <select id="access-level-request" required>
+                                    <option value="Read">Read</option>
+                                    <option value="Write">Write</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="justification">Justification:</label>
+                                <textarea id="justification" rows="3" required>Need access for quarterly report generation.</textarea>
+                            </div>
+                            <button type="submit" class="neumorphic-btn">Submit Request</button>
+                        </form>
+                    </div>
+                    <div class="card glassmorphism">
+                        <h3>Pending & Approved Requests</h3>
+                        <div id="request-cards-container" class="request-cards-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cloud Audit Logs Section -->
+            <section id="audit-logs" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Cloud Audit Logs</h2>
+                </div>
+                <div class="card-grid">
+                    <div class="card glassmorphism audit-log-card">
+                        <div id="audit-logs-display" class="audit-logs-terminal">
+                            <!-- Logs will be appended here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resource Provisioning Simulator Section -->
+            <section id="resource-provisioning" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Resource Provisioning Simulator</h2>
+                </div>
+                <div class="card-grid">
+                    <div class="card glassmorphism">
+                        <h3>Provision New Resource</h3>
+                        <form id="provision-form">
+                            <div class="form-group">
+                                <label for="resource-type">Resource Type:</label>
+                                <select id="resource-type" required>
+                                    <option value="">Select...</option>
+                                    <option value="EC2 Instance">EC2 Instance</option>
+                                    <option value="RDS Database">RDS Database</option>
+                                    <option value="S3 Bucket">S3 Bucket</option>
+                                    <option value="GKE Cluster">GKE Cluster</option>
+                                    <option value="Cloud Function">Cloud Function</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="resource-region">Region:</label>
+                                <input type="text" id="resource-region" value="us-east-1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="resource-size">Size/Config:</label>
+                                <input type="text" id="resource-size" value="t2.micro" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="resource-purpose">Purpose:</label>
+                                <input type="text" id="resource-purpose" value="Web App Backend" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="resource-team">Team:</label>
+                                <input type="text" id="resource-team" value="DevOps" required>
+                            </div>
+                            <button type="submit" class="neumorphic-btn">Provision</button>
+                        </form>
+                    </div>
+                    <div class="card glassmorphism">
+                        <h3>Provisioned Resources</h3>
+                        <div id="provisioned-resources-container" class="provisioned-resource-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IAM Policy Expiry Calendar Section -->
+            <section id="iam-calendar" class="dashboard-section">
+                <div class="section-header">
+                    <h2>IAM Policy Expiry Calendar</h2>
+                </div>
+                <div class="card-grid">
+                    <div class="card glassmorphism calendar-card">
+                        <div id="calendar-header">
+                            <button class="neumorphic-btn" id="prev-month">&lt;</button>
+                            <h3 id="current-month-year"></h3>
+                            <button class="neumorphic-btn" id="next-month">&gt;</button>
+                        </div>
+                        <div id="calendar-grid" class="calendar-grid">
+                            <!-- Days of the week header -->
+                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                            <!-- Calendar days populated by JS -->
+                        </div>
+                    </div>
+                    <div class="card glassmorphism expiry-details-card">
+                        <h3>Upcoming Expiries & Reminders</h3>
+                        <div id="expiry-details-list">
+                            <p>Select a date on the calendar to view details.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cloud Hygiene Score Section -->
+            <section id="hygiene-score" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Cloud Hygiene Score</h2>
+                </div>
+                <div class="card-grid">
+                    <div class="card glassmorphism score-card">
+                        <h3>Overall Score</h3>
+                        <div class="score-display">
+                            <span id="hygiene-score-value">85</span><span class="score-total">/100</span>
+                        </div>
+                        <div class="health-indicator green" id="hygiene-health-status">Good Hygiene</div>
+                    </div>
+                    <div class="card glassmorphism checklist-card">
+                        <h3>Hygiene Checklist</h3>
+                        <ul id="hygiene-checklist">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security Best Practices Panel Section -->
+            <section id="best-practices" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Security Best Practices</h2>
+                </div>
+                <div class="card-grid best-practices-grid">
+                    <a href="https://aws.amazon.com/iam/features/least-privilege/" target="_blank" class="card glassmorphism practice-card">
+                        <h3>IAM Least Privilege</h3>
+                        <p>Grant only the permissions required to perform a task.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://cloud.google.com/secret-manager/docs/overview" target="_blank" class="card glassmorphism practice-card">
+                        <h3>Secrets Management</h3>
+                        <p>Securely store and retrieve sensitive information.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://docs.microsoft.com/en-us/azure/active-directory/authentication/concept-mfa-howitworks" target="_blank" class="card glassmorphism practice-card">
+                        <h3>MFA Enforcement</h3>
+                        <p>Add an extra layer of security to user logins.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://docs.aws.amazon.com/security/latest/fundamentals/auth-access.html" target="_blank" class="card glassmorphism practice-card">
+                        <h3>Regular Access Reviews</h3>
+                        <p>Periodically review and revoke unnecessary access.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://cloud.google.com/security/best-practices/network-security" target="_blank" class="card glassmorphism practice-card">
+                        <h3>Network Security Best Practices</h3>
+                        <p>Secure your cloud networks with firewalls and segmentation.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://docs.microsoft.com/en-us/azure/security/fundamentals/data-encryption-overview" target="_blank" class="card glassmorphism practice-card">
+                        <h3>Data Encryption</h3>
+                        <p>Encrypt data at rest and in transit.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Compliance Panel Section -->
+            <section id="compliance-panel" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Compliance Panel</h2>
+                </div>
+                <div class="card-grid compliance-grid">
+                    <div class="card glassmorphism compliance-card compliant">
+                        <h3>GDPR</h3>
+                        <p>General Data Protection Regulation</p>
+                        <span class="status-tag approved">✅ Compliant</span>
+                        <p class="audit-info">Last audit: 2024-10-15</p>
+                    </div>
+                    <div class="card glassmorphism compliance-card at-risk">
+                        <h3>HIPAA</h3>
+                        <p>Health Insurance Portability and Accountability Act</p>
+                        <span class="status-tag pending">⚠️ At Risk</span>
+                        <p class="audit-info">Next audit: 2025-03-01</p>
+                    </div>
+                    <div class="card glassmorphism compliance-card compliant">
+                        <h3>SOC 2</h3>
+                        <p>Service Organization Control 2</p>
+                        <span class="status-tag approved">✅ Compliant</span>
+                        <p class="audit-info">Last audit: 2024-11-20</p>
+                    </div>
+                    <div class="card glassmorphism compliance-card compliant">
+                        <h3>ISO 27001</h3>
+                        <p>Information Security Management Systems</p>
+                        <span class="status-tag approved">✅ Compliant</span>
+                        <p class="audit-info">Last audit: 2024-09-01</p>
+                    </div>
+                    <div class="card glassmorphism compliance-card at-risk">
+                        <h3>PCI DSS</h3>
+                        <p>Payment Card Industry Data Security Standard</p>
+                        <span class="status-tag pending">⚠️ At Risk</span>
+                        <p class="audit-info">Next audit: 2025-06-10</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cloud Learning Hub Section -->
+            <section id="learning-hub" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Cloud Learning Hub</h2>
+                </div>
+                <div class="card-grid learning-grid">
+                    <a href="#" class="card glassmorphism learning-card">
+                        <h3>Internal Onboarding Docs</h3>
+                        <p>Essential guides for new CloudOps team members.</p>
+                        <span class="material-icons external-link">description</span>
+                    </a>
+                    <a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" class="card glassmorphism learning-card">
+                        <h3>AWS Well-Architected Framework</h3>
+                        <p>Principles for operational excellence, security, reliability, and cost optimization.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="#" class="card glassmorphism learning-card">
+                        <h3>CLI Command Cheatsheets</h3>
+                        <p>Quick reference for AWS, Azure, and GCP CLI commands.</p>
+                        <span class="material-icons external-link">code</span>
+                    </a>
+                    <a href="https://www.terraform.io/docs" target="_blank" class="card glassmorphism learning-card">
+                        <h3>Terraform Tutorials</h3>
+                        <p>Infrastructure as Code with Terraform.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://www.pulumi.com/docs/" target="_blank" class="card glassmorphism learning-card">
+                        <h3>Pulumi Guides</h3>
+                        <p>Infrastructure as Code using familiar programming languages.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                    <a href="https://aws.amazon.com/cdk/" target="_blank" class="card glassmorphism learning-card">
+                        <h3>AWS CDK Resources</h3>
+                        <p>Define your cloud infrastructure using code.</p>
+                        <span class="material-icons external-link">open_in_new</span>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Global Action Feedback Message -->
+    <div id="action-feedback" class="glassmorphism"></div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
